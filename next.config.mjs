@@ -6,9 +6,6 @@ const nextConfig = {
     typescript: {
         ignoreBuildErrors: true
     },
-    experimental: {
-        ignoreBuildErrors: true
-    },
     output: 'standalone',
     webpack(config) {
         // Grab the existing rule that handles SVG imports
