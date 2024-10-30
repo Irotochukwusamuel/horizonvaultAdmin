@@ -6,7 +6,7 @@ import {ChevronLeft} from 'lucide-react';
 import {useRouter} from 'next/navigation';
 import {AppwriteUser} from '@/types/user';
 import {DataTable} from '@/components/data-table';
-import {PaymentDetailColumn} from '@/app/(dashboard)/(routes)/users/components/columns';
+import {CustomerColumns, PaymentDetailColumn, WalletDetailColumn} from '@/app/(dashboard)/(routes)/users/components/columns';
 import {format} from 'date-fns';
 import profile from '@/assets/images/profile.jpg';
 import {cn} from '@/lib/utils';
@@ -20,7 +20,7 @@ const InformationCard = ({title, data, color}: { title: string, data: cardType, 
 
             <p className="text-[#2D3045] text-[18px] font-semibold">{title}</p>
 
-            <div className={cn('mt-5 p-[20px] rounded-[6px] grid grid-cols-2 gap-[40px]', color)}>
+            <div className={cn('mt-5 p-[20px] rounded-[6px] grid grid-cols-3 gap-[40px]', color)}>
                 {
                     data?.map((item, key) => {
                         return (
@@ -48,9 +48,13 @@ const EmptyNode = () => {
 };
 
 
-const Details = ({user_info}: { user_info: AppwriteUser }) => {
+const Details = ({user}: { user: { user: object, transactions: object, wallets: object } }) => {
 
     const navigate = useRouter();
+
+    const user_info : AppwriteUser = user?.user
+
+    console.log("user_info", user)
 
     const User_field: cardType = [
         {label: 'Full name', value: `${user_info?.first_name} ${user_info?.last_name}`},
@@ -62,6 +66,11 @@ const Details = ({user_info}: { user_info: AppwriteUser }) => {
         {label: 'Is Admin', value: user_info?.is_admin ? 'Yes' : 'No' ?? 'N/A'},
         {label: 'Date Joined', value: format(Number(user_info?.created_at * 1000), 'dd/MM/yyyy')},
     ];
+
+    const current_row = () => {
+        let row: { balance: number, wallet_id: string, wallet_name: string } = user?.wallets
+        return row;
+    };
 
 
     return (
@@ -86,6 +95,23 @@ const Details = ({user_info}: { user_info: AppwriteUser }) => {
 
             <div className="flex justify-between items-center gap-5">
                 <InformationCard title={'User Information'} data={User_field} color="bg-[#F6FEF9]"/>
+            </div>
+
+            <div className="mt-5">
+                <p className="text-[#2D3045] text-[18px] font-semibold"> User Wallets</p>
+
+
+                <div>
+                    <DataTable
+                        searchKey="wallet_name"
+                        hasFooter
+                        paginationSize={10}
+                        regular
+                        columns={WalletDetailColumn}
+                        data={current_row()}
+
+                    />
+                </div>
             </div>
 
 

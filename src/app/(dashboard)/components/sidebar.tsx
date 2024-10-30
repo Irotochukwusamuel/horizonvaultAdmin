@@ -54,31 +54,22 @@ export default function Sidebar() {
 
   function sidebarItems() {
     const items = [
-      // {
-      //   icon: <CourseIcon className={iconClassName} />,
-      //   title: 'Courses',
-      //   route: '/courses',
-      // },
+
       {
         icon: <UsersIcon className={iconClassName} />,
         title: 'Customers',
         route: '/users',
       },
-      // {
-      //   icon: <AdminIcon className={iconClassName} />,
-      //   title: 'Admin',
-      //   route: '/admins',
-      // },
+      {
+        icon: <AdminIcon className={iconClassName} />,
+        title: 'Admin Wallets',
+        route: '/admins',
+      },
       {
         icon: <PaymentIcon className={iconClassName} />,
         title: 'Transactions',
         route: '/transactions',
       },
-      // {
-      //   icon: <CogIcon className={iconClassName} />,
-      //   title: 'Settings',
-      //   route: '/settings',
-      // },
       {
         icon: <LogoutIcon className={iconClassName} />,
         title: 'Logout',

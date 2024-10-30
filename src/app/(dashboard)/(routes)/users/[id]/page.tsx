@@ -11,7 +11,7 @@ const Page = async ({params}: { params: { id: number } }) => {
 
     return (
         <div>
-            <Details user_info={user}/>
+            <Details user={user}/>
         </div>
     );
 };

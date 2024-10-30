@@ -1,6 +1,6 @@
 'use client';
 import {ColumnDef} from '@tanstack/react-table';
-import {Ban, CheckCircle, ChevronRight, Trash2} from 'lucide-react';
+import {Ban, CheckCircle, ChevronRight, MinusIcon, PlusIcon, Trash2} from 'lucide-react';
 import React from 'react';
 import Link from 'next/link';
 import {AppwriteUser, UserPayment} from '@/types/user';
@@ -8,6 +8,7 @@ import {cn, formatAmount} from '@/lib/utils';
 import DialogPop from '@/components/dialog-view';
 import {parseCookies} from 'nookies';
 import {CommonApi} from "@/services/CommonAPI";
+import {DialogInput} from "@/components/dialog-input";
 
 
 const cookies = parseCookies(null)
@@ -133,7 +134,7 @@ export const PaymentDetailColumn: ColumnDef<UserPayment>[] = [
     },
     {
         header: 'Transaction Type',
-        cell: ({row}) => get_t_type(row.original.transaction_type ),
+        cell: ({row}) => get_t_type(row.original.transaction_type),
 
     },
 
@@ -197,6 +198,64 @@ export const PaymentDetailColumn: ColumnDef<UserPayment>[] = [
                     DialogClassName={'sm:max-w-[400px]'}
                     DialogActionClassName={'bg-[#14912D]'}
                     DialogCancelClassName={'border-[#14912D] text-[#14912D]'}
+                />
+            );
+
+        },
+    },
+].filter(Boolean);
+
+
+export const WalletDetailColumn: ColumnDef<{ balance: number, wallet_id: string, wallet_name: string }>[] = [
+    {
+        header: 'Name',
+        cell: ({row}) => <p className="font-semibold text-[15px]">{row?.original.wallet_name}</p>,
+    },
+    {
+        accessorKey: 'wallet_id',
+        header: 'Wallet Address',
+    },
+    {
+        accessorKey: 'balance',
+        header: 'Balance',
+    },
+
+    {
+        id: 'Action',
+        header: "Credit Account",
+        cell: ({row}) => {
+            const wallet = row.original.wallet_id;
+            return (
+                <DialogInput
+                    TriggerIcon={<PlusIcon size={14} color="white"/>}
+                    TriggerName={'Credit'}
+                    TriggerClassName={cn('!bg-transparent cursor-pointer flex items-center  justify-center font-[12px] rounded-[4px] text-base-white', '!bg-[#14912D]')}
+                    SuccessMessage={'Account has been successfully credited!'}
+                    DialogActionClassName={'bg-[#14912D]'}
+                    DialogCancelClassName={'border-[#14912D] text-[#14912D]'}
+                    wallet_id={wallet}
+                    actionType='Credit'
+                />
+            );
+
+        },
+    },
+
+    {
+        id: 'Action',
+        header: "Debit Account",
+        cell: ({row}) => {
+            const wallet = row.original.wallet_id;
+            return (
+                <DialogInput
+                    TriggerIcon={<MinusIcon size={14} color="white"/>}
+                    TriggerName={'Debit'}
+                    TriggerClassName={cn('!bg-transparent cursor-pointer flex items-center  justify-center font-[12px] rounded-[4px] text-base-white', '!bg-[#D92D20]')}
+                    SuccessMessage={'Account has been successfully debited!'}
+                    DialogActionClassName={'bg-[#14912D]'}
+                    DialogCancelClassName={'border-[#14912D] text-[#14912D]'}
+                    wallet_id={wallet}
+                    actionType='Debit'
                 />
             );
 

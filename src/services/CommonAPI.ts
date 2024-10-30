@@ -21,7 +21,17 @@ export class CommonApi extends BaseAPI {
         return response?.data?.data;
     }
 
-    public async getUser(user_id: number): Promise<AppwriteUser> {
+    public async wallet_list(): Promise<object> {
+        const response = await this.axiosInstance.get(`/wallet/wallets`);
+        return response?.data?.data;
+    }
+
+    public async admin_wallet_list(): Promise<object> {
+        const response = await this.axiosInstance.get(`/admin/admin-wallets`);
+        return response?.data?.data;
+    }
+
+    public async getUser(user_id: number): Promise<object> {
         const response = await this.axiosInstance.get(`/admin/users/${user_id}`);
         return response?.data?.data;
     }
@@ -58,22 +68,22 @@ export class CommonApi extends BaseAPI {
 
     public async AddAdminWallet(wallet_address: string, coin_id: number): Promise<object> {
         const response = await this.axiosInstance.post(`/admin/add-wallet`, {wallet_address, coin_id});
-        return response?.data?.data;
+        return response?.data?.message;
     }
 
     public async RemoveAdminWallet(wallet_address: string, coin_id: number): Promise<object> {
         const response = await this.axiosInstance.post(`/admin/remove-wallet`, {wallet_address, coin_id});
-        return response?.data?.data;
+        return response?.data?.message;
     }
 
     public async CreditWallet(wallet_address: string, amount: number): Promise<object> {
         const response = await this.axiosInstance.post(`/admin/credit-user`, {wallet_address, amount});
-        return response?.data?.data;
+        return response?.data?.message;
     }
 
     public async DebitWallet(wallet_address: string, amount: number): Promise<object> {
         const response = await this.axiosInstance.post(`/admin/debit-user`, {wallet_address, amount});
-        return response?.data?.data;
+        return response?.data?.message;
     }
 
 }

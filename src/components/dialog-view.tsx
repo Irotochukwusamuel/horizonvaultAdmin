@@ -28,7 +28,7 @@ interface DialogPopInterface {
     DialogActionClassName?: string
     DialogCancelClassName?: string
     DisableActionButton?: boolean
-    DialogActionCallback: () => void
+    DialogActionCallback: () => any
 
 }
 
@@ -63,16 +63,16 @@ export default function DialogPop(
         try {
             setLoading(true);
             const res = await DialogActionCallback();
-            console.log("api-result", res)
+            console.log("Wallet", res)
             SuccessMessage && toast.success(res ?? SuccessMessage, {position: 'top-right'});
 
 
-        } catch (error) {
-            console.log(error)
+        } catch (error : any) {
             toast.error(error ?? "An error occurred", {position: 'top-right'});
 
         } finally {
             router.refresh();
+            window.location.reload()
             setLoading(false);
             setDialogOpen(false);
         }
