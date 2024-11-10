@@ -71,6 +71,21 @@ export default function Sidebar() {
         route: '/transactions',
       },
       {
+        icon: <DashboardIcon className={iconClassName} />,
+        title: 'Investments',
+        route: '/investments',
+      },
+      {
+        icon: <CourseIcon className={iconClassName} />,
+        title: 'Schemes',
+        route: '/schemes',
+      },
+      {
+        icon: <CogIcon className={iconClassName} />,
+        title: 'Coins',
+        route: '/coins',
+      },
+      {
         icon: <LogoutIcon className={iconClassName} />,
         title: 'Logout',
         route: '/',

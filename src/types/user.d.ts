@@ -56,6 +56,22 @@ export type UserPayment = {
     status: string;
     transaction_type: string;
 };
+export type Investments = {
+    email : string
+    first_name : string,
+    last_name : string,
+    amount: number;
+    created_at: number;
+    id: number;
+    last_updated: number;
+    deposit_type: string | null;
+    investment_interval: string | null;
+    investment_name: string;
+    investment_rate: string;
+    scheme_id: number;
+    status: string;
+    wallet_id: string | null;
+};
 export type AppwriteUserPayment = UserPayment;
 
 type SignupForm = Pick<User, 'first_name' | 'last_name' | 'phone' | 'email'> & {

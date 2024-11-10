@@ -2,56 +2,49 @@ import Button from '@/components/button';
 import {
     Dialog, DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
-    DialogHeader,
-    DialogTitle,
     DialogTrigger,
-} from '@/components/ui/dialog';
-import React, {useState} from 'react';
-import {toast} from 'react-toastify';
-import {cn} from '@/lib/utils';
-import {useRouter} from 'next/navigation';
-
+} from "@/components/ui/dialog"
+import {Input} from "@/components/input";
+import {Label} from "@/components/ui/label"
+import React, {useState} from "react";
+import {cn} from "@/lib/utils";
+import {toast} from "react-toastify";
+import {useRouter} from "next/navigation";
+import {CommonApi} from "@/services/CommonAPI";
+import {parseCookies} from "nookies";
 
 interface DialogPopInterface {
     TriggerName?: string
     TriggerClassName: string
     TriggerIcon?: React.ReactElement
-    DialogName: string,
-    DialogDesc?: string | React.ReactNode
-    DialogCancelName: string
-    DialogActionName: string
     SuccessMessage?: string
-    DialogClassName?: string
     DialogActionClassName?: string
     DialogCancelClassName?: string
     DisableActionButton?: boolean
-    DialogActionCallback: () => any
+    coin_id: number
+    actionType: 'Credit' | 'Debit'
 
 }
 
-export default function DialogPop(
-    {
-        TriggerName,
-        TriggerClassName,
-        TriggerIcon,
-        DialogName,
-        DialogDesc,
-        DialogCancelName,
-        DialogActionName,
-        DialogActionCallback,
-        DialogActionClassName,
-        DialogCancelClassName,
-        SuccessMessage,
-        DialogClassName,
-        DisableActionButton,
-    }: DialogPopInterface) {
+export function UpdateRate({
+                               SuccessMessage,
+                               TriggerClassName,
+                               TriggerIcon,
+                               TriggerName,
+                               DialogCancelClassName,
+                               DisableActionButton,
+                               DialogActionClassName,
+                               coin_id,
+                               actionType
+                           }: DialogPopInterface) {
 
-    const [isloading, setLoading] = useState(false);
     const [isDialogOpen, setDialogOpen] = useState(false);
+    const [isloading, setLoading] = useState(false);
+    const [amount, set_amount] = useState(0);
     const router = useRouter();
-
+    const cookies = parseCookies(null)
+    const common = new CommonApi(cookies?.sessionId)
     const onChange = (isDialogOpen: boolean) => {
         if (!isDialogOpen) {
             setDialogOpen(false);
@@ -61,11 +54,15 @@ export default function DialogPop(
     const handleAction = async () => {
         try {
             setLoading(true);
-            const res = await DialogActionCallback();
+            const res = await common.UpdateCoinRate(coin_id, amount)
+
             SuccessMessage && toast.success(res ?? SuccessMessage, {position: 'top-right'});
-            window.location.reload()
+
+
         } catch (error: any) {
+            console.log(error)
             toast.error(error ?? "An error occurred", {position: 'top-right'});
+
         } finally {
             router.refresh();
             setLoading(false);
@@ -73,10 +70,10 @@ export default function DialogPop(
         }
     };
 
+
     return (
         <Dialog open={isDialogOpen} onOpenChange={onChange}>
             <DialogTrigger asChild>
-
                 <Button
                     variant="outline-green"
                     className={TriggerClassName}
@@ -91,23 +88,26 @@ export default function DialogPop(
                 >
                     {TriggerName}
                 </Button>
-
-
             </DialogTrigger>
-            <DialogContent className={DialogClassName}>
-                <DialogHeader>
-                    <DialogTitle className="text-[24px] font-semibold">{DialogName}</DialogTitle>
-                    {
-                        DialogDesc &&
-                        <DialogDescription className="text-[#6C757D] text-[16px]">
-                            {DialogDesc}
-                        </DialogDescription>
-                    }
-                </DialogHeader>
-                <DialogFooter className="flex !justify-between w-full mt-5">
+            <DialogContent className="sm:max-w-[425px]">
+
+                <div className="grid gap-4 py-4">
+                    <div className="items-center gap-4">
+                        <Label htmlFor="name" className="text-right font-semibold">
+                            New Rate
+                        </Label>
+                        <Input
+                            onChange={(e) => set_amount(e.target.value)}
+                            id="name"
+                            type='number'
+                            className="col-span-3"
+                        />
+                    </div>
+                </div>
+                <DialogFooter>
                     <DialogClose asChild>
                         <Button variant="outline-green"
-                                className={cn('border-[#D92D20] border-[1px] rounded-[4px] text-[#D92D20] w-full font-semibold', DialogCancelClassName)}>{DialogCancelName}</Button>
+                                className={cn('border-[#D92D20] border-[1px] rounded-[4px] text-[#D92D20] w-full font-semibold', DialogCancelClassName)}>Cancel</Button>
                     </DialogClose>
                     <Button
                         disabled={DisableActionButton ?? false}
@@ -115,10 +115,10 @@ export default function DialogPop(
                         loading={isloading}
                         variant="outline-green" className={cn('bg-[#D92D20] text-base-white w-full font-semibold', DialogActionClassName)}
                     >
-                        {isloading ? 'Loading' : DialogActionName}
+                        {isloading ? 'Loading' : "Save Changes"}
                     </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
-    );
+    )
 }

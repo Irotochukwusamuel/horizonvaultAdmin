@@ -1,6 +1,6 @@
 'use client';
 import { DataTable } from '@/components/data-table';
-import { AdminColumns } from '@/app/(dashboard)/(routes)/admins/components/columns';
+import { CoinsColumns } from '@/app/(dashboard)/(routes)/coins/components/columns';
 
 
 
@@ -17,11 +17,11 @@ const Body = ({ data }: { data: Array<object> }) => {
 
           <div>
             <DataTable
-              searchKey="wallet_name"
+              searchKey="name"
               hasFooter
-              paginationSize={5}
+              paginationSize={20}
               regular
-              columns={AdminColumns}
+              columns={CoinsColumns}
               data={row}
             />
           </div>

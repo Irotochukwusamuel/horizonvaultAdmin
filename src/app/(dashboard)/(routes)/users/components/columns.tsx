@@ -1,14 +1,15 @@
 'use client';
 import {ColumnDef} from '@tanstack/react-table';
-import {Ban, CheckCircle, ChevronRight, MinusIcon, PlusIcon, Trash2} from 'lucide-react';
+import {Ban, CheckCircle, ChevronRight, Edit, MinusIcon, PlusIcon, Trash2} from 'lucide-react';
 import React from 'react';
 import Link from 'next/link';
-import {AppwriteUser, UserPayment} from '@/types/user';
+import {AppwriteUser, Investments, UserPayment} from '@/types/user';
 import {cn, formatAmount} from '@/lib/utils';
 import DialogPop from '@/components/dialog-view';
 import {parseCookies} from 'nookies';
 import {CommonApi} from "@/services/CommonAPI";
 import {DialogInput} from "@/components/dialog-input";
+import {UpdateStatus} from "@/app/(dashboard)/(routes)/investments/components/update-status";
 
 
 const cookies = parseCookies(null)
@@ -198,6 +199,100 @@ export const PaymentDetailColumn: ColumnDef<UserPayment>[] = [
                     DialogClassName={'sm:max-w-[400px]'}
                     DialogActionClassName={'bg-[#14912D]'}
                     DialogCancelClassName={'border-[#14912D] text-[#14912D]'}
+                />
+            );
+
+        },
+    },
+].filter(Boolean);
+
+export const InvestmentDetailColumn: ColumnDef<Investments>[] = [
+    {
+        accessorKey: 'id',
+        header: 'Id',
+    },
+    {
+        accessorKey: 'email',
+        header: 'Email',
+    },
+    {
+        accessorKey: 'amount',
+        header: 'Amount',
+    },
+    {
+        accessorKey: 'investment_rate',
+        header: 'Rate',
+    },
+    {
+        accessorKey: 'deposit_type',
+        header: 'Deposit Type',
+    },
+    {
+        accessorKey: 'status',
+        header: 'Status',
+    },
+    {
+        header: 'Type',
+        accessorKey: 'investment_name',
+
+    },
+
+    {
+        header: 'View',
+        cell: ({row}) => {
+            const row_info = row.original;
+            return (
+                <Link
+                    href={`/investments/${row_info?.id}`}
+                    className=" cursor-pointer flex items-center bg-[#2D3045] justify-center font-[12px] rounded-[4px] w-[80px] h-[28px] text-base-white">
+                    View
+                    <ChevronRight size={19} color="white"/>
+                </Link>
+            );
+
+        },
+    },
+
+    {
+        header: "Delete",
+        cell: ({row}) => {
+            const investment_id = row.original.id;
+            return (
+                <DialogPop
+                    TriggerIcon={<Trash2 size={19} color="white"/>}
+                    TriggerName={'Delete'}
+                    TriggerClassName={cn('!bg-transparent cursor-pointer flex items-center  justify-center font-[12px] rounded-[4px] text-base-white', '!bg-[#D92D20]')}
+                    DialogName={'Delete Investment'}
+                    DialogDesc={'Are you sure you want to delete this Investment ?'}
+                    DialogCancelName={'Delete'}
+                    DialogActionName={'Delete Investment'}
+                    DialogActionCallback={async () => await common.DeleteInvestment(investment_id)}
+                    SuccessMessage={'Investment successfully deleted.'}
+                    DialogClassName={'sm:max-w-[400px]'}
+                    DialogActionClassName={'bg-[#D92D20]'}
+                    DialogCancelClassName={'border-[#D92D20] text-[#D92D20]'}
+                />
+            );
+
+        },
+    },
+    {
+        id: 'Update_Status',
+        header: "Update Status",
+        cell: ({row}) => {
+
+            const investmentId = row.original.id;
+
+            return (
+                <UpdateStatus
+                    TriggerIcon={<Edit size={14} color="white"/>}
+                    TriggerName={'Update'}
+                    TriggerClassName={cn('!bg-transparent cursor-pointer flex items-center  justify-center font-[12px] rounded-[4px] text-base-white', '!bg-[orange]')}
+                    SuccessMessage={'Investment has been successfully updated!'}
+                    DialogActionClassName={'bg-[#14912D]'}
+                    DialogCancelClassName={'border-[#14912D] text-[#14912D]'}
+                    investmentId={investmentId}
+                    actionType='Debit'
                 />
             );
 

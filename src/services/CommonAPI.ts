@@ -86,4 +86,50 @@ export class CommonApi extends BaseAPI {
         return response?.data?.message;
     }
 
+    public async UpdateInvestmentStatus(investment_id: number, status: string): Promise<object> {
+        const response = await this.axiosInstance.post(`/admin/investment/status`, {investment_id, status});
+        return response?.data?.message;
+    }
+
+    public async CreateScheme(name: string, rate: number, minimum: number, maximum: number, interval: string): Promise<object> {
+        const response = await this.axiosInstance.post(`/admin/schemes`, {name, rate: Number(rate), minimum: Number(minimum), maximum: Number(maximum), interval});
+        return response?.data?.message;
+    }
+
+    public async DeleteInvestment(investment_id: number): Promise<object> {
+        const response = await this.axiosInstance.delete(`/admin/investment/${investment_id}`);
+        return response?.data?.message;
+    }
+
+    public async DeleteScheme(scheme_id: number): Promise<object> {
+        const response = await this.axiosInstance.delete(`/admin/schemes/${scheme_id}`);
+        return response?.data?.message;
+    }
+
+    public async GetAllSchemes(): Promise<object> {
+        const response = await this.axiosInstance.get(`/investment/schemes`);
+        return response?.data?.data;
+    }
+
+    public async GetAllInvestments(): Promise<object> {
+        const response = await this.axiosInstance.get(`/admin/investment`);
+        return response?.data?.data;
+    }
+
+    public async GetInvestment(investment_id: number): Promise<object> {
+        const response = await this.axiosInstance.get(`/investment/${investment_id}`);
+        return response?.data?.data;
+    }
+
+    public async GetAllCoins(): Promise<object> {
+        const response = await this.axiosInstance.get(`/investment/coins`);
+        return response?.data?.data;
+    }
+
+    public async UpdateCoinRate(coin_id: number, rate: number): Promise<object> {
+        const response = await this.axiosInstance.post(`/investment/update-coin-rate`, {coin_id: Number(coin_id), rate: Number(rate)});
+        return response?.data?.data;
+    }
+
+
 }
