@@ -9,6 +9,7 @@ import {CommonApi} from "@/services/CommonAPI";
 
 const Header = ({wallet_list}: { wallet_list: Array<{ [key: string]: string }> }) => {
     const [wallet_address, set_wallet_address] = useState('');
+    const [wallet_network, set_wallet_network] = useState('');
     const [coin_id, set_coin_id] = useState(null);
     const cookies = parseCookies(null)
     const common = new CommonApi(cookies?.sessionId)
@@ -48,6 +49,18 @@ const Header = ({wallet_list}: { wallet_list: Array<{ [key: string]: string }> }
                     />
                 </div>
 
+                <div className="items-center gap-4">
+                    <Label htmlFor="name" className="text-right font-semibold">
+                        Wallet Network
+                    </Label>
+                    <Input
+                        onChange={(e) => set_wallet_network(e.target.value)}
+                        id="name"
+                        type='text'
+                        className="col-span-3"
+                    />
+                </div>
+
             </form>
         );
     };
@@ -67,7 +80,7 @@ const Header = ({wallet_list}: { wallet_list: Array<{ [key: string]: string }> }
                     DialogCancelName="Cancel"
                     DialogActionName="Add Wallet"
                     SuccessMessage={"Wallet has been added"}
-                    DialogActionCallback={async () => await common.AddAdminWallet(wallet_address, Number(coin_id?.value))}
+                    DialogActionCallback={async () => await common.AddAdminWallet(wallet_address, Number(coin_id?.value), wallet_network)}
                     DialogClassName={'sm:max-w-[500px]'}
                     DialogActionClassName="bg-[#2D3045]"
                     DialogCancelClassName="border-[#2D3045] text-base-black"

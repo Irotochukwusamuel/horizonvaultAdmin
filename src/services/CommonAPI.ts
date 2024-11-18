@@ -66,8 +66,9 @@ export class CommonApi extends BaseAPI {
         return response?.data?.message
     }
 
-    public async AddAdminWallet(wallet_address: string, coin_id: number): Promise<object> {
-        const response = await this.axiosInstance.post(`/admin/add-wallet`, {wallet_address, coin_id});
+    public async AddAdminWallet(wallet_address: string, coin_id: number, wallet_network : string): Promise<object> {
+        const response = await this.axiosInstance.post(`/admin/add-wallet`, {wallet_address, coin_id, wallet_network});
+        console.info(response)
         return response?.data?.message;
     }
 

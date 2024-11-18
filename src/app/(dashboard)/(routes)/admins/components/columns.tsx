@@ -24,6 +24,10 @@ export const AdminColumns: ColumnDef<object>[] = [
         header: 'Wallet Address ',
     },
     {
+        accessorKey: 'wallet_network',
+        header: 'Wallet Network ',
+    },
+    {
         header: 'Date Created',
         cell: ({row}) => format((row?.original?.created_at * 1000) as string, 'MMM dd, yyyy'),
     },
@@ -31,7 +35,7 @@ export const AdminColumns: ColumnDef<object>[] = [
         id: 'action',
         header: 'Delete Wallet',
         cell: ({row}) => {
-            const coin_id = row?.original?.id;
+            const coin_id = row?.original?.coin_id;
             const wallet_address = row?.original?.wallet_id;
             return (
                 <DialogPop
