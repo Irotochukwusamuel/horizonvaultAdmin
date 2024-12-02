@@ -7,7 +7,7 @@ interface TokenResponse {
     refreshToken: string;
 }
 
-const baseURL = 'https://api.horizonvaut.com';
+const baseURL = 'https://api.fomobitmax.com';
 
 export class BaseAPI {
     public axiosInstance: AxiosInstance;
